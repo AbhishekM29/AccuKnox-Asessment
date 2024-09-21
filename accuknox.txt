@@ -1,0 +1,38 @@
+For Minikube Users:
+Frontend Service:
+Since the frontend-service is of type LoadBalancer, it may not be directly accessible on Minikube. Instead, use port forwarding:
+kubectl port-forward service/frontend-service 8080:80
+
+Backend Service:
+The backend-service is of type ClusterIP, which is only accessible within the Kubernetes cluster. To test it locally, you can also use port forwarding:
+kubectl port-forward service/backend-service 3000:3000
+
+❯ kubectl get pods -A
+NAMESPACE              NAME                                        READY   STATUS    RESTARTS        AGE
+default                backend-deployment-6bc7544b64-hlbzn         1/1     Running   1 (6m29s ago)   10m
+default                backend-deployment-6bc7544b64-xcdl5         1/1     Running   1 (6m29s ago)   21m
+default                frontend-deployment-6485c5c85c-p4c8j        1/1     Running   0               3m31s
+kube-system            coredns-7db6d8ff4d-nf7kv                    1/1     Running   1 (6m34s ago)   24m
+kube-system            etcd-minikube                               1/1     Running   1 (6m39s ago)   25m
+kube-system            kube-apiserver-minikube                     1/1     Running   1 (6m29s ago)   25m
+kube-system            kube-controller-manager-minikube            1/1     Running   1 (6m39s ago)   25m
+kube-system            kube-proxy-tmb8b                            1/1     Running   1 (6m39s ago)   24m
+kube-system            kube-scheduler-minikube                     1/1     Running   1 (6m39s ago)   25m
+kube-system            storage-provisioner                         1/1     Running   2 (6m12s ago)   25m
+kubernetes-dashboard   dashboard-metrics-scraper-b5fc48f67-vrpc5   1/1     Running   1 (6m39s ago)   12m
+kubernetes-dashboard   kubernetes-dashboard-779776cb65-kdbcf       1/1     Running   1 (6m39s ago)   12m
+❯ kubectl get deployment -A
+NAMESPACE              NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+default                backend-deployment          2/2     2            2           21m
+default                frontend-deployment         1/1     1            1           4m
+kube-system            coredns                     1/1     1            1           25m
+kubernetes-dashboard   dashboard-metrics-scraper   1/1     1            1           12m
+kubernetes-dashboard   kubernetes-dashboard        1/1     1            1           12m
+❯ kubectl get services -A
+NAMESPACE              NAME                        TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
+default                backend-service             ClusterIP      10.97.208.27     <none>        3000/TCP                 22m
+default                frontend-service            LoadBalancer   10.100.182.224   <pending>     80:31939/TCP             4m27s
+default                kubernetes                  ClusterIP      10.96.0.1        <none>        443/TCP                  26m
+kube-system            kube-dns                    ClusterIP      10.96.0.10       <none>        53/UDP,53/TCP,9153/TCP   26m
+kubernetes-dashboard   dashboard-metrics-scraper   ClusterIP      10.105.152.88    <none>        8000/TCP                 13m
+kubernetes-dashboard   kubernetes-dashboard        ClusterIP      10.99.46.54      <none>        80/TCP                   13m
